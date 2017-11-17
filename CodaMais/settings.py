@@ -1,5 +1,7 @@
 # Standart Library.
 import os
+from decouple import config
+from dj_database_url import parse as dburl
 
 # Local Django.
 from theory import constants as theory_constants
@@ -34,7 +36,7 @@ SECRET_KEY = 't_z444##g_z!_)x!(f5rp!4noy=gevqit)25n4iv((vx(iofq9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['gcs-codamais.herokuapp.com', '0.0.0.0', '127.0.0.1', 'localhost']
 
 
 # Application definition.
@@ -102,12 +104,16 @@ WSGI_APPLICATION = 'CodaMais.wsgi.application'
 # Database.
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+
+DATABASES = {'default': config('DATABASE_URL', default=default_dburl, cast=dburl), }
 
 # User model
 
@@ -197,6 +203,8 @@ LOGGING = {
         },
     },
 }
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
