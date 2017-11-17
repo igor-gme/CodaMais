@@ -43,15 +43,14 @@ jobs:
           name: create database
           command: |
             . venv/bin/activate
-            python3 CodaMais/manage.py makemigrations
-            python3 CodaMais/manage.py migrate
+            python3 manage.py makemigrations
+            python3 manage.py migrate
 
       # run tests!
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            cd CodaMais
             coverage run ./manage.py test
             coverage report
 
@@ -61,3 +60,15 @@ jobs:
 
       - store_test_results:
           path: test-reports/
+
+      - run: bash .circleci/setup-heroku.sh
+
+      - add_ssh_keys:
+          fingerprints:
+            - "1a:65:04:a1:9a:22:ee:7a:36:1b:cc:d3:8d:88:49:d7"
+      - deploy:
+          name: Deploy Master to Heroku
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "T01-ConfigTools" ]; then
+              git push heroku master -f
+            fi
