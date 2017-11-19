@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: chmod +x boot.sh
+    command: ./boot.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
