@@ -51,7 +51,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            coverage run ./manage.py test
+            coverage run ./manage.py test --settings=CodaMais.ci
             coverage report
 
       - store_artifacts:
