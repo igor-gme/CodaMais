@@ -13,7 +13,7 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/postgres:9.6
+      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
@@ -43,8 +43,8 @@ jobs:
           name: create database
           command: |
             . venv/bin/activate
-            python3 manage.py makemigrations
-            python3 manage.py migrate
+            python3 manage.py makemigrations --settings=CodaMais.ci
+            python3 manage.py migrate --settings=CodaMais.ci
 
       # run tests!
       - run:
