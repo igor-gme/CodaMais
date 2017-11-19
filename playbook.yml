@@ -1,0 +1,80 @@
+- hosts: web
+  vars:
+
+    dbname: CodaMais
+    dbuser: CodaMaisuser
+    dbpassword: password
+    path: /vagrant
+
+  become: true
+
+  tasks:
+    - name: "Dependences"
+      become: true
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - postgresql
+        - postgresql-contrib
+        - libpq-dev
+        - python-psycopg2
+        - python-pip
+
+    - name: Install global python requirements
+      become: true
+      pip:
+        requirements: /vagrant/requirements.txt
+      # pip: name={{item}} state=present
+      # with_items:
+      #   - coverage
+      #   - dj-database-url
+      #   - dj-static
+      #   - django-wysiwyg-redactor
+      #   - flake8
+      #   - mccabe
+      #   - olefile
+      #   - Pillow
+      #   - pycodestyle
+      #   - pyflakes
+      #   - python-decouple
+      #   - pytz
+      #   - requests
+      #   - static3
+      #   - gunicorn
+      #   - psycopg2
+
+
+    # - name: Install django
+    #   become: true
+    #   pip:
+    #     name: django
+    #     version: 1.10
+
+    # - name: Run Server
+    #   service: name=postgresql state=started
+    #
+    # - name: Create database
+    #   become: true
+    #   become_user: postgres
+    #   postgresql_db: name={{ dbname }}
+    #
+    # - name: Create database user
+    #   become: true
+    #   become_user: postgres
+    #   postgresql_user: db={{ dbname }} user={{ dbuser }} password={{ dbpassword }} priv=ALL role_attr_flags=NOSUPERUSER
+
+    # - name: Change Settings
+    #   template:
+    #     src=templates/settings.py.j2
+    #     dest={{ path }}/CodaMais/settings.py
+
+    - name: Makemigrations
+      django_manage: command=makemigrations app_path={{ path }}
+
+    - name: Migrate
+      django_manage: command=migrate app_path={{ path }}
+
+    # - name: Load fixtures
+    #   django_manage:
+    #     command: loaddata
+    #     fixtures: db.fixture.json
+    #     app_path: "{{ path }}"

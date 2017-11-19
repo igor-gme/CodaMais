@@ -10,3 +10,5 @@ htmlcov
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+.vagrant/
+ubuntu-xenial-16.04-cloudimg-console.log
