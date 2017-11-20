@@ -110,21 +110,21 @@ WSGI_APPLICATION = 'CodaMais.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+if 'DYNO' in os.environ:
+    default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 
-# default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-#
-# DATABASES = {'default': config('DATABASE_URL', default=default_dburl, cast=dburl), }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'db',
-        'PORT': '5432',
+    DATABASES = {'default': config('DATABASE_URL', default=default_dburl, cast=dburl), }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
     }
-}
 
 # User model
 
